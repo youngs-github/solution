@@ -1,0 +1,114 @@
+html,
+body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+#app {
+  width: 100%;
+  height: 100%;
+}
+.wrapper {
+  width: 400px;
+  height: 260px;
+  border: 1px solid #ddd;
+  margin: auto;
+}
+.slider {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  position: relative;
+}
+.items {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+.item {
+  top: 0;
+  left: 0;
+  color: #fff;
+  float: left;
+  height: 100%;
+  display: flex;
+  position: absolute;
+  user-select: none;
+  align-items: center;
+  justify-content: center;
+  background-color: #364d79;
+}
+.dots {
+  left: 0;
+  right: 0;
+  bottom: 20px;
+  height: 10px;
+  display: flex;
+  position: absolute;
+  justify-content: center;
+}
+.dots-list {
+  height: 4px;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  list-style: none;
+}
+.dots-list li {
+  display: inline-block;
+}
+.dots-list li.selected button {
+  width: 26px;
+  opacity: 1;
+}
+.dots-list li button {
+  width: 18px;
+  height: 4px;
+  border: none;
+  cursor: pointer;
+  margin: 0 3px;
+  display: block;
+  opacity: 0.3;
+  outline: none;
+  transition: all 300ms linear;
+  border-radius: 1px;
+  background-color: #fff;
+}
+.dots-list li button:hover {
+  opacity: 0.7;
+}
+.btns {
+  width: 0;
+}
+.btns .prev {
+  top: 50%;
+  left: 5px;
+  width: 20px;
+  height: 30px;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  opacity: 0.6;
+  outline: none;
+  position: absolute;
+  transform: translateY(-50%);
+  text-align: center;
+  background-color: #fff;
+}
+.btns .next {
+  top: 50%;
+  right: 5px;
+  width: 20px;
+  height: 30px;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  opacity: 0.6;
+  outline: none;
+  position: absolute;
+  transform: translateY(-50%);
+  text-align: center;
+  background-color: #fff;
+}

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>超长虚拟列表</title>
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <div id="app">
+      <virtual-list></virtual-list>
+    </div>
+    <script src="./vue.js"></script>
+    <script src="./virtual-list.js"></script>
+    <script>
+      // 寂静模式
+      Vue.config.slient = true;
+      Vue.config.devtools = false;
+      Vue.config.productionTip = false;
+      // 生成基本数据
+      Vue.prototype.$list = new Array(10000).fill(0).map((v, i) => ({
+        id: i + 1,
+        left: `left-${i + 1}`,
+        name: `item-${i + 1}`,
+        right: `right-${i + 1}`
+      }));
+      // const timer = performance.now();
+      new Vue({
+        el: '#app'
+      });
+    </script>
+  </body>
+</html>
