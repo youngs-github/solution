@@ -42,7 +42,7 @@
 
 1、概念：sop（same-origin-policy）；
 2、条件：协议、域名、端口三者任意不匹配；
-3、不会跨域的标签：script、image、link；
+3、不会跨域的标签：script、image（埋点使用）、link；
 4、影响：cookie、storage等无法访问；
 
 ### 2.2、跨标签通信
@@ -75,9 +75,20 @@
 1、input对象：必选参数，可以是url或者request对象，request对象的大部分属性均是只读，所以实际使用时，大多将其写为url字符串；
 2、init对象：可选参数，包含method、body（请求体，blob、formdata、string等）、headers、referrer、mode（请求模式，cors、no-cors、same-origin等）、cache（缓存，default、reload、no-cache等）、credentials（携带cookie，include、omit、same-origin等）、destination、redirect（默认fellow自动重定向）、clone（创建一个副本）；
 3、状态：仅当网络异常时，fetch才会被catch，其余情况下，只要浏览器能够收到回复（4xx），即走then，可利用response.ok状态判断；
+4、response属性：headers（响应头，Header对象）、ok（布尔值，状态码200-299）、redirected（重定向状态，请求来自重定向则为true）、status（状态码，200等）、statusText（状态消息，ok等）、type（响应类型，basic标准值同源响应、cors跨域请求、error网络错误、opaque不允许跨域）、url（请求url）、body（响应体）；
+5、原型方法：clone、arrayBuffer、blob、formData、json（转成json）、text（转成string）；
+6、ReadableStream对象：locked属性（只可读取一次）、cancel（取消读取流）、getReader（获取reader对象，手动进行读取）、pipeTo、pipeThrough、tee；
+7、缺点：不支持同步请求、不支持取消请求、无法查看进度、不支持超时设置；
+8、兼容性：IE不支持、chrome42、ff39、safari10.1；
 
-### 条件
+### 2.6、cookie
 
-1、文件上传判断类型
-	1.1、type+name
-	1.2、二进制头尾内容
+1、属性：name、value、domain（仅当同域才可以访问，子域可以访问父域）、path（必须一致）、expires/max-age、size、httponly（仅从http发，js无法获取）、secure（进从https发）、samesite、priority；
+2、优化：去除多余cookie、压缩、过期时间、domain控制；
+3、安全：会被浏览器自动带上，会导致xss、csrf问题，可以通过在头部添加token解决；
+
+### 2.7、首屏优化
+
+1、资源请求（cdn、gzip、缓存）；
+2、资源预请求（prefetch、preload）；
+3、代码优化（tree shaking、按需懒加载）
