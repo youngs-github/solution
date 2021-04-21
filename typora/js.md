@@ -53,3 +53,60 @@
 
 1、没有变量提升：var存在提升（创建、初始化），let/const仅创建提升（暂时性死区，不允许使用），function也存在提升（创建、初始化、赋值）；
 2、分配内存地址：var会在栈区预分配内存地址（执行时再存储对应变量或者变量地址），let/const不会预分配内存地址（且会检测是否已经存在，存在则报错）；
+
+# 2、相关知识
+
+### 2.1、event loop
+
+1、宏任务：macro task，包括：setTimeout、setInterval、setImmediate、requestAnimationFrame、MessageChannel等；
+
+2、微任务：micro task，包括：Promise、process.nextTick、MutationObserver等；
+
+3、调度过程：每次从宏任务队列取出一个任务，执行完毕之后执行微任务队列（全部），循环往复直至全空；
+
+### 2.2、继承
+
+1、原型链：将父类实例绑定到子类原型链上；
+2、借用构造函数：子类构造函数中借用父类构造函数；
+3、组合式：使用1、2两点，并将constructor指向子类；
+4、原型式：利用空对象作为媒介，new F()，F的原型链指向被继承对象；
+5、寄生式：使用第4点，同时将原型方法、属性挂载到实例上；
+6、寄生组合式：使用第4点，create父类原型的子元素，将constructor指向子类，并赋值给子类原型，new 时借用父类构造函数；
+
+### 2.3、模块化发展
+
+1、iife：立即执行函数，单独作用域，避免变量冲突；
+2、amd：requireJS，依赖必须提前声明好，后面支持延迟加载；
+3、cmd：seaJS，强调延迟加载，支持动态引入依赖文件；
+4、commonJS：nodejs，动态引入、浅拷贝、缓存（解决循环依赖，默认空对象）；
+5、umd：兼容amd、cmd、commonJS语法；
+6、es module：静态依赖，静态只读引用，等运行时再去依赖里面取出实际需要的值；
+
+### 2.4、ES模块
+
+##### 2.4.1、es6
+
+1、let、const；
+2、字符串扩展：模板字符串、includes、startsWith、endsWith；
+3、解构表达式；
+4、函数：参数默认值、箭头函数、对象函数简写；
+5、数组：map、reduce；
+6、对象：对象属性简写；
+7、扩展运算符：多用于数组、类数组、对象；
+8、promise；
+9、set/map；
+10、class语法；
+11、generator：yield、for of遍历；
+12、模块化；
+
+##### 2.4.2、es7
+
+1、数组：includes；
+2、指数：2**3；
+
+##### 2.4.3、es8:
+
+1、async、await；
+2、Object.entries/values：补充Object.keys；
+3、字符串扩展：padStart、padEnd，填充使用，长度+string；
+4、
