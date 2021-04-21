@@ -2,7 +2,19 @@
 
 ### 1.1、属性
 
-可就太多了；
+##### 1.1.1、css3属性
+
+1、animation：动画属性，IE10、chrome43、ff16、safari9；
+2、background-origin：背景图片的position相对于什么盒子来定位（content-box、padding-box、border-box等），IE9、chrome1、ff4、safari3；
+3、background-size：背景图片尺寸（cover、contain等），IE9、chrome3、ff4、safari5；
+4、flex：弹性布局，IE11、chrome29、ff20、safari9；
+5、grid：网格布局，IE不支持、chrome57、ff52、safari10；
+6、opacity：透明度，IE9（IE4-8用filter=alpha）、chrome1、ff1、safari1；
+7、perspective：三维z轴距离，IE10、chrome36、ff16、safari4；
+8、point-events：鼠标事件，IE11、chrome1、ff1、safari4；
+9、transform：变形，IE10、chrome36、ff16、safari9；
+10、transition：过渡效果，IE10、chrome26、ff16、safari9；
+11、keyframes：关键帧动画，IE10、chrome43、ff16、safari9；
 
 ### 1.2、选择器
 
@@ -39,6 +51,7 @@
 5、inline、inline-block元素；
 6、z-index=auto、z-index=0；
 7、z-index > 0；
+8、css合成层；
 
 ##### 2.1.3、继承
 
@@ -87,7 +100,42 @@
 
 ### 4.1、正常布局
 
-定义：不使用任何布局策略；
+##### 4.1.1、BFC
+
+概念：块级格式化上下文（block formatting context），独立的渲染区域或容器；
+作用：去除浮动、防止字体环绕、去除垂直外边距重叠问题、自适应两列布局；
+产生：根元素、float（非none）、position（absolute、fixed）、inline-block、flex、inline-flex、table-cell、overflow（非visible）等；
+规则：内部块元素（block元素）在垂直方向上从顶部依次排列、同一个bfc中垂直的两个元素会发生外边距重叠、内部块元素的左边缘与容器左侧边缘接触、独立容器（不会影响到外面）、高度计算（包括内部浮动元素）、浮动盒子不会叠加到bfc上（非bfc时会覆盖在盒子上方）；
+
+##### 4.1.2、IFC
+
+概念：内联格式化上下文（inline formatting context）；
+特性：线框（line box）高度由包含的最高行内元素决定、IFC中不可能有块级元素（p中插入div会导致p分裂成2个）、IFC对外表现为块级元素（block，与div垂直排列）；
+应用：水平居中（子元素inline-block会在外层产生IFC，通过text-align可以水平居中）、垂直居中（用其中一个元素撑开父元素的高度，并设置其vertical-align=middle，则其他行内元素可以在此父元素下垂直居中）；
+
+##### 4.1.3、元素隐藏
+
+1、display=none：不占用区域、不会触发其他绑定事件、没有继承性、计数器无效、css3的transition不支持display属性；
+2、visibility=hidden：占用区域、不会触发其他绑定事件、有继承性（子元素visible可以显示）、计数器有效（li元素）、css3的transition支持visibility属性；
+3、z-index<0：占用区域、会触发其他绑定事件...；
+4、opacity=0：占用区域、会触发其他绑定事件、没有继承性、计数器有效、css3的transition支持；
+5、transform=scale(0,0)：占用区域、不会触发其他绑定事件；
+
+##### 4.1.4、line-height
+
+1、概念：两行文字基线之间的距离；
+2、基线：top（顶线）、text-top（文字顶部）、middle（中线）、baseline（基线）、text-bottom（文字底部）、bottom（底部）；
+3、高度：内联元素高度由line-height决定，多行文本的高度等于单行文本高度的累加；
+4、属性：normal（默认，非继承）、数字（1.2等，根据自身font-size计算行高）、百分比/数值单位（20px）；
+5、块盒子内img底部区域问题：块盒子（font-size=0、line-height=0）、子元素（display=block、vertical-align=bottom）；
+
+##### 4.1.5、vertical-align
+
+1、基线类：top、middle、baseline、bottom，盒模型的strut节点（支柱）继承了line-height；
+2、文本类：text-top、text-bottom；
+3、上/下标：sub、super；
+4、数值百分比：px、em、%；
+5、生效前提：inline、inline-block、table-cell；
 
 ### 4.2、弹性盒子
 
@@ -103,6 +151,11 @@
 
 1、n行/列布局：flex（0  0  100px）、flex（1 1 auto）、flex（0  0  200px）；
 
+##### 4.2.3、FFC
+
+概念：弹性布局格式化上下文（flexable formatting context）；
+特性：独立的渲染区域；
+
 ### 4.3、网格布局
 
 概念：被设计用于在二维上把元素按行和列排列整齐；
@@ -112,6 +165,11 @@
 
 1、父容器：container，属性包括grid-template-rows（行数）、grid-template-columns（列数）、grid-gap（间距）等；
 2、子元素：item，属性包括grid-row（start~end）、grid-column（start~end）；
+
+##### 4.2.2、GFC
+
+概念：网格格式化上下文（gridlayout formatting context）；
+特性：独立的渲染区域，类似table布局；
 
 ### 4.4、浮动布局
 
@@ -180,25 +238,18 @@
 
 ### 5.2、通用知识
 
-##### 5.2.1、元素隐藏
-
-1、display=none：不占用区域、不会触发其他绑定事件、没有继承性、计数器无效、css3的transition不支持display属性；
-2、visibility=hidden：占用区域、不会触发其他绑定事件、有继承性（子元素visible可以显示）、计数器有效（li元素）、css3的transition支持visibility属性；
-3、z-index<0：占用区域、会触发其他绑定事件...；
-4、opacity=0：占用区域、会触发其他绑定事件、没有继承性、计数器有效、css3的transition支持；
-5、transform=scale(0,0)：占用区域、不会触发其他绑定事件；
-
-##### 5.2.2、BFC
-
-概念：块级格式化上下文（block formatting context），独立的渲染区域或容器；
-作用：去除浮动、防止字体环绕、去除垂直外边距重叠问题、自适应两列布局；
-产生：根元素、float（非none）、position（absolute、fixed）、inline-block、flex、inline-flex、table-cell、overflow（非visible）等；
-规则：内部块元素（block元素）在垂直方向上从顶部依次排列、同一个bfc中垂直的两个元素会发生外边距重叠、内部块元素的左边缘与容器左侧边缘接触、独立容器（不会影响到外面）、高度计算（包括内部浮动元素）、浮动盒子不会叠加到bfc上（非bfc时会覆盖在盒子上方）；
-
-##### 5.2.3、css图形
+##### 5.2.1、css图形
 
 1、圆形：border-radius=50%；
 2、半圆：width=100、height=50、border-radius=100 100 0 0；
 3、扇形：border-top-width=100、border-top-left-radius=100、width=100；
 4、三角形：width=0、height=0、border-left=50 solid trans、border-right=50 solid trans、border-bottom=100 solid red；
-5、梯形：width=50、height=0、border-width=50；
+5、梯形：width=50、height=0、border-left=50 solid trans、border-right=50 solid trans、border-bottom=50 solid red；
+
+##### 5.2.2、link、@import
+
+1、概念：link是xhtml标签，@import由css提供；
+2、加载顺序：link会随页面一同被加载，@import会等到页面被加载完再加载；
+3、兼容问题：link基本没有兼容问题，@import兼容IE5；
+4、样式权重：link的样式权重高于@import；
+5、元素可控：link是dom元素，可以控制，@import属于css，dom无法控制；
