@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>深拷贝</title>
+  </head>
+  <body>
+    <script src="./gen.js"></script>
+    <script>
+      /**
+       * 深拷贝、递归拷贝
+       */
+      function copy_recur(src) {
+        // 基础类型
+        if (typeof src !== 'object' || src === null || src === undefined) {
+          return src;
+        }
+        if (Array.isArray(src)) {
+          let ans = new Array(src.length);
+          for (let i = 0; i < src.length; i++) {
+            ans[i] = copy_recur(src[i]);
+          }
+          return ans;
+        } else {
+          let ans = {};
+          for (let key in src) {
+            if (src.hasOwnProperty(key)) {
+              ans[key] = copy_recur(src[key]);
+            }
+          }
+          return ans;
+        }
+      }
+    </script>
+    <script>
+      /**
+       * 深拷贝、迭代拷贝
+       */
+      function copy_loop(src) {}
+    </script>
+    <script>
+      // 递归拷贝
+      const src = gen();
+      const tar = copy_recur(src);
+      console.log(JSON.stringify(src) === JSON.stringify(tar));
+    </script>
+  </body>
+</html>

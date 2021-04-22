@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>柯理化</title>
+  </head>
+  <body>
+    <script>
+      /**
+       * 柯理化
+       */
+      function curry(...args) {
+        let value = args.reduce((s, v) => s + v, 0);
+        // 迭代函数
+        function F(...args) {
+          value += args.reduce((s, v) => s + v, 0);
+          return F;
+        }
+        F.toString = function () {
+          return value;
+        };
+        return F;
+      }
+    </script>
+    <script>
+      // 测试
+      console.log(curry(1));
+      console.log(curry(1, 2));
+      console.log(curry(1, 2)(3));
+      console.log(curry(1, 2)(3)(4, 5));
+    </script>
+  </body>
+</html>

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>原型</title>
+  </head>
+  <body>
+    <script>
+      /**
+       * 判断原型链
+       */
+      function isPrototypeOf(tar, constructor) {
+        let proto = tar;
+        while (proto) {
+          proto = Object.getPrototypeOf(proto);
+          if (proto === constructor.prototype) {
+            return true;
+          }
+        }
+        return false;
+      }
+    </script>
+    <script>
+      // 样例
+      console.log(isPrototypeOf(1, String));
+      console.log(isPrototypeOf('', String));
+      console.log(isPrototypeOf({}, Object));
+      console.log(isPrototypeOf(true, Number));
+      console.log(isPrototypeOf(new Date(), Date));
+      console.log(isPrototypeOf(new Array(), Array));
+      console.log(isPrototypeOf(new Boolean(), Boolean));
+    </script>
+  </body>
+</html>
