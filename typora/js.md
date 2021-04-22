@@ -104,9 +104,33 @@
 1、数组：includes；
 2、指数：2**3；
 
-##### 2.4.3、es8:
+##### 2.4.3、es8
 
 1、async、await；
 2、Object.entries/values：补充Object.keys；
 3、字符串扩展：padStart、padEnd，填充使用，长度+string；
-4、
+4、SharedArrayBuffer、Atomic；
+
+##### 2.4.4、es9
+
+1、异步迭代：await + for；
+2、Promise.finally；
+3、rest/spread属性：fn(arg1, arg2, ...args)；
+4、正则表达式补充；
+
+##### 2.4.5、es10
+
+1、JSON.stringify优化；
+2、flat、flatMap；
+3、字符串trimStart、trimEnd；
+4、Object.fromEntries；
+5、Symbol.prototype.description：symbol的描述信息；
+6、基本类型：BigInt；
+
+### 2.5、箭头函数
+
+1、this：箭头函数没有自己的this，因此使用call、bind、apply方法无法更改其this指向；
+2、arguments：箭头函数不绑定arguments属性，可以使用rest参数；
+3、prototype：箭头函数没有prototype，也就没有继承的super；
+4、new：箭头函数不能使用new命令，也就没有new.target；
+5、generator：箭头函数不能使用yield命令，不能做generator函数；
