@@ -22,6 +22,12 @@ generator：@babel/generator包，根据preset、plugin等对ast进行处理然�
 2、chunkhash：针对入口文件及其依赖，发生变化时，所有文件应用同一个值，一般应用于output输出js的chunk文件，如果库文件不变，则输出的库文件名也不变；
 3、contenthash：针对文件自身内容的变化，一般应用于输出css文件，如果css内容有变化，输出的文件名也会变化；
 
+### 1.4、module、bundle、chunk异同
+
+1、module：对于写出来的一份代码文件，就是一个module；
+2、chunk：打包过程中同一个入口的一整套依赖文件，入口不同，chunk就不同；
+3、bundle：打包好之后输出的文件，浏览器可以直接执行的；
+
 # 2、常见概念
 
 ### 2.1、常见loader

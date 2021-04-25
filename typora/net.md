@@ -23,7 +23,7 @@
 
 1、特点：可靠的、面向连接的字节流服务（全双工）；
 2、结构：首部（20字节：源端口、目的端口、序号seq、确认号ack、标志位[ACK、SYN、FIN等]、窗口大小、检验和等）、数据；
-3、三次握手：（SYN=1、seq=x） => （SYN=1、ACK=1、seq=y、ack=+1） => (ACK=1、seq=x+1、ack=y+1)；
+3、三次握手：（SYN=1、seq=x） => （SYN=1、ACK=1、seq=y、ack=x+1） => (ACK=1、seq=x+1、ack=y+1)；
 4、四次挥手：（FIN=1、seq=u） => (ACK=1、seq=v、ack=u+1) => (FIN=1、ACK=1、seq=w、ack=u+1) => (ACK=1、seq=u+1、ack=w+1)；
 5、拥塞控制：慢启动（开始时，拥塞窗口为1，可以按指数级递增）、拥塞避免（拥塞窗口到达限定值，线性加1）、快重传（发送方尽快进行重传，而不是等超时重传计时器超时再重传）、快恢复（丢失个别的报文时，不启动慢开始算法，而执行快恢复算法）；
 6、流量控制：通过滑动窗口的大小改变来实现，由接收方（可动态调整）回给发送方，通过缓冲区提高效率；
@@ -77,7 +77,7 @@
 
 #### 4.2.1、http1.1、http1.0区别
 
-1、缓存处理（缓存头，新增Cache-Control、ETag、If-Match、If-None-Match、If-Modified-Since等）；
+1、缓存处理（缓存头，新增Cache-Control、ETag、If-None-Match、Last-Modified、If-Modified-Since等）；
 2、带宽优化及网络连接的使用（支持range头即断点续传，支持不发送请求/响应body部分）；
 3、错误通知的管理（新增29个错误管理状态码，如：409冲突、410被删除等）；
 4、host头处理（请求必须带host头域，否则报错400）；
@@ -201,7 +201,7 @@ patch		是			否			否			否		    否		否
 ### 4.7、WebSocket协议
 
 1、兼容性：IE10、FF6、Chrome14、Safiri6等；
-2、降级兼容：sockjs、socket.io，xhr-streaming（持久连接+分块传输编码，只允许服务器向客户的单向推数据）、eventsource（不支持IE）、long-poll（长轮询，服务器不关闭连接，客户端主动进行超时关闭重连）；
+2、降级兼容：sockjs、socket.io、xhr-streaming（持久连接+分块传输编码，只允许服务器向客户的单向推数据）、eventsource（不支持IE）、long-poll（长轮询，服务器不关闭连接，客户端主动进行超时关闭重连）；
 3、协议原理：基于TCP协议（帧形式数据）、具有命名空间、可以和http server共享同一端口；
 4、请求头：connection（upgrade+201）、upgrade（websocket）、sec-websocket-key（用于验证的标识）、sec-websocket-version（确认版本）、sec-websocket-extensions（支持的插件）；
 5、响应头：connection（upgrade）、upgrade（websocket）、sec-websocket-accept（接受的标识，从前端的key中加上固定标识sha1得到结果）；
