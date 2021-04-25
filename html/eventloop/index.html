@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>事件循环</title>
+    <meta charset="UTF-8" />
+  </head>
+  <body>
+    <script>
+      console.log(1);
+      Promise.resolve(2).then((v) => {
+        console.log(v);
+      });
+      setTimeout(() => console.log(3));
+    </script>
+    <script>
+      Promise.resolve(4).then((v) => {
+        console.log(v);
+      });
+    </script>
+    <script>
+      Promise.resolve(5).then((v) => {
+        console.log(v);
+      });
+      console.log(6);
+    </script>
+  </body>
+</html>

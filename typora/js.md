@@ -58,11 +58,11 @@
 
 ### 2.1、event loop
 
-1、宏任务：macro task，包括：setTimeout、setInterval、setImmediate、requestAnimationFrame、MessageChannel等；
+1、宏（外部）队列：macrotask queue，包括：DOM操作、用户交互、网络请求、history操作、定时器、script标签、requestAnimationFrame、MessageChannel等；
 
-2、微任务：micro task，包括：Promise、process.nextTick、MutationObserver等；
+2、微（内部）队列：microtask queue，包括：Promise、process.nextTick、MutationObserver、Object.observe（已废弃）；
 
-3、调度过程：每次从宏任务队列取出一个任务，执行完毕之后执行微任务队列（全部），循环往复直至全空；
+3、调度过程：每次从宏任务队列取出一个任务，执行完毕之后执行微任务队列（全部），执行浏览器渲染任务，循环往复；
 
 ### 2.2、继承
 
