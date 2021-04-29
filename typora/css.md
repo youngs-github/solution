@@ -260,3 +260,14 @@
 3、兼容问题：link基本没有兼容问题，@import兼容IE5；
 4、样式权重：link的样式权重高于@import；
 5、元素可控：link是dom元素，可以控制，@import属于css，dom无法控制；
+
+### 5.3、sass、less
+
+##### 5.3.1、extend、include
+
+extend：继承语法，编译后会将当前的.class也一并编译，不会生成重复代码；
+include：引用混合样式（@mixin），会将引用的代码复制到当前.class里面；
+
+##### 5.3.2、mixin
+
+混合指令，使用@include引用，类似定义样式变量对象；
