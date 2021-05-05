@@ -154,12 +154,28 @@ IE9、Chrome5、Firefox4、Safari5；
 4、plugin：VueLoaderPlugin插件，根据webpack版本注册vue-loader插件；
 5、pitcher：添加一些处理插件；
 
+### 11.3、编译内容
+
+##### 11.3.1、template
+
+输出：render方法；
+
+​	名称	|  vue2.x  |  vue
+
+|               | vue2.x              | vue3.x                             |
+| ------------- | ------------------- | ---------------------------------- |
+| this对象      | with (this)         | with (ctx)                         |
+| _c方法        | createElement       | createBlock                        |
+| v-for         | _l方法              | fragment + renderList方法          |
+| v-if          | 三元表达式 + _c方法 | 三元表达式 + createBlock + 静态key |
+| 静态属性/节点 | 无                  | 提升到render方法之外               |
+
 # 12、vue-router
 
 ### 12.1、原理
 
 1、通过Vue.use（Vue.mixin）注册一个全局组件（beforeCreate、destroyed生命周期钩子）用于处理每一个组件的渲染操作；
-1、利用popstate监听浏览器自身history状态改变方法（pushState、replaceState、back、go、forward）；
+1、利用onpopstate监听浏览器自身history状态改变方法（pushState、replaceState、back、go、forward）；
 2、匹配相应的url放置于router-view元素中，自定义render方法用于渲染具体组件；
 
 ### 12.2、popstate与hashchange
@@ -167,7 +183,12 @@ IE9、Chrome5、Firefox4、Safari5；
 1、popstate：浏览器做出动作时（go、back、forward）会触发，而其他的（pushState、replaceState）不会触发，兼容性：IE10、ff4；
 2、hashchange：仅当hash值改变时才会触发，如果浏览器不支持popstate，将会采用hashchange，兼容性：IE8、ff3.6、chrome5；
 
-### 12.3、其他
+### 12.3、hash与history
+
+1、hash：url中含有#号，无刷新，请求服务时，不会把#也带过去，微信里面分享的二维码等会把#截掉，导致异常；
+2、history：url中没有#号，无刷新，请求服务时，使用完整的url，需要后端配合做路由，否则会404；
+
+### 12.4、其他
 
 1、router-link：生成a标签，点击时，阻止默认点击事件，通过响应式原理触发app._route属性更新；
 2、router-view：支持嵌套路由（由当前元素往上级查找，若查找到祖先元素也是router-view，则该路由是嵌套路由），命名路由（components作为对象，子属性key即为路由名称），内部有缓存；

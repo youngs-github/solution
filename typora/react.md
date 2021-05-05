@@ -170,6 +170,25 @@
 5、组件复用：redux组件通过hoc、props重新组织，组件复用比较麻烦，mobx可以更细粒度拆分组件；
 6、开发速度：redux需要写action、reducer比较繁琐，还得配合中间件实现异步action，mobx较为便捷；
 
+### 2.4、异步action
+
+##### 2.4.1、thunk、promise
+
+原理：使用函数组合包装原有的action来实现异步；
+缺点：thunk使得redux可以接受函数作为action，导致action不易维护（形式不统一、逻辑分散）；
+
+##### 2.4.2、saga
+
+原理：使用generator函数进行数据获取、逻辑处理、action分发等操作，剥离业务操作和action/creator等；
+特点：
+		1、获取数据逻辑都写在saga.js里面，不用再写到action里面；
+		2、代码类似同步语法，更易读、易调试；
+		3、代码异常可以直接捕获；
+
+##### 2.4.3、dva
+
+原理：基于saga，借鉴约定优于配置思想，将state、reducers、effects等拼装到了一起；
+
 # 3、react-router
 
 1、原理：history、prompt；

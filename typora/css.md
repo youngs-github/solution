@@ -263,11 +263,45 @@
 
 ### 5.3、sass、less
 
-##### 5.3.1、extend、include
+##### 5.3.1、区别
+
+1、环境：less在js上运行，sass在ruby上运行；
+2、变量：less用@，sass用$；
+3、循环：less只允许循环数值，sass可以遍历任何类型；
+4、其他：less稍显简单，sass更像一门正规的编程语言；
+
+##### 5.3.2、extend、include
 
 extend：继承语法，编译后会将当前的.class也一并编译，不会生成重复代码；
 include：引用混合样式（@mixin），会将引用的代码复制到当前.class里面；
 
-##### 5.3.2、mixin
+##### 5.3.3、mixin
 
 混合指令，使用@include引用，类似定义样式变量对象；
+
+
+
+# 6、移动端问题
+
+### 6.1、1px问题
+
+概念：移动端的设计图尺寸往往会大于屏幕真实尺寸，例如宽度300px的屏幕设计图是600px或更高，更多是边框宽度问题；
+解决：
+1、0.5px：新版的一些浏览器已经支持；
+2、viewport+rem：dpr，initial-scale=0.5，需要用js修改meta标签内容，如果dpr=2，则initial-scale=0.5，圆角也没问题；
+3、transform+伪元素：父元素relative，伪元素before/after设置200%大小、border=1px、scale=0.5，如果已经被使用，则可能需要嵌套实现；
+4、border-image：局限性比较大；
+5、background-image：局限性比较大；
+
+### 6.2、点击延迟问题
+
+概念：移动端浏览器点击之后300ms才会触发真正的click事件，源于双击缩放功能，safari率先引入；
+解决：
+1、禁用缩放：优先选用，meta标签使用viewport控制user-scalable=no、maximum-scale、minimum-scale；
+2、更改默认视口宽度：meta标签使用viewport控制width=device-width，没有完全禁用缩放，用户依然可以用双指控制；
+3、js控制：fastclick、tap等，在touchend时mock一个click事件，并把原生300毫秒触发的click事件阻止掉；
+
+### 6.3、点击穿透问题
+
+概念：在使用touchstart事件时，由于移动端事件顺序（touchstart => touchend => click）的原因，如果隐藏某个元素，click事件可能会派发到其下面的元素上，造成意外事件；
+解决：click事件很难用touchstart代替，另外touchstart还会引起用户滑动的时候误触发；
