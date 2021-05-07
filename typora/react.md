@@ -100,7 +100,7 @@
 
 ##### 1.7.1、对比class组件
 
-1、class组件问题：组件复用（高阶组件嵌套、多层Provider嵌套）、复杂组件难以理解（组件拆分细化比较难）、this指向问题（箭头函数、bind处理，本质上源于react内部执行这些方法并不是使用instance.xxx）；
+1、class组件问题：组件复用（hoc、render props等，解构时产生多层组件嵌套）、复杂的组件逻辑（生命周期较多，逻辑分散，理解比较吃力）、this指向问题（箭头函数、bind处理，本质上源于react内部执行这些方法并不是使用instance.xxx，另一点是babel转换出来的代码量增加很多，难以优化）；
 2、hooks组件优点：易于组件复用（可以拆分很精细）、数据管理解耦（useContext很方便）、易上手理解；
 3、hooks组件缺点：闭包问题（使用useEffect解决）、setState回调（使用useEffect解决）、增加心智负担；
 4、hooks使用要点：只能在最顶层使用，不能用在if里面，不能用在循环里面，不能用在嵌套函数里面，属性均挂载于fiber的memoizedState属性上构造成单向非循环链表；
