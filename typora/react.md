@@ -41,6 +41,7 @@
 8、componentDidUpdate：更新完成，参数（prevProps、prevState、snapshot），此处已经完成渲染，故所有值均是前一次渲染的值；
 9、componentWillUnmount：即将卸载，参数（无）；
 总结：传递的参数其实都是new的，如果后续可能会进行改动，从语义化角度讲应该是old；
+10、componentDidCatch：捕获到异常，参数（error、errorInfo），可配合getDerivedStateFromError方法组合错误边界组件；
 
 ##### 1.2.2、执行顺序
 

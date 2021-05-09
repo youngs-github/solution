@@ -21,3 +21,5 @@
 
 原理：将目标网站通过iframe的方式嵌入自己的网页，并透出一个按钮之类的；
 避免：x-frame-options头（deny：不允许iframe、sameorigin：同域、allow-from：指定源）、js防御（self==top）；
+
+## 5、重放攻击

@@ -219,38 +219,16 @@ patch		是			否			否			否		    否		否
 2、303表示客户端应该用get获取资源，会把post请求变为get请求进行重定向；
 3、307会遵照浏览器标准，不会从post转为get；
 
-### 4.6、HTTPS协议
+### 4.6、缓存
 
-1、验证身份：证书（包含：公钥、域名或IP、组、加密算法、有效期、颁发者、指纹、数字签名）；
-2、内容加密：ssl/tls非对称加密认证，之后使用对称秘钥加密解密；
-3、防止篡改：消息原文（部分关键信息）提前摘要后使用ca私钥对其进行加密，即为数字签名，浏览器使用ca公钥去解密证书签名来验证是否被篡改；
-4、默认使用443端口，可以防止运营商劫持；
-
-##### 4.6.1、握手
-
-1、客户端hello，包括tls版本、支持加密套件等；
-2、服务端hello，包括证书、公钥、选择的加密套件、是否要求客户端证书等；
-3、客户端验证信息，包括验证证书是否有效（无效弹出警告）、生成一个随机值并用证书公钥加密随机值（秘钥）、是否传递自己的证书等；
-4、服务端验证信息，包括验证客户端证书是否有效、发送加密的finish消息；
-
-### 4.7、WebSocket协议
-
-1、兼容性：IE10、FF6、Chrome14、Safiri6等；
-2、降级兼容：sockjs、socket.io、xhr-streaming（持久连接+分块传输编码，只允许服务器向客户的单向推数据）、eventsource（不支持IE）、long-poll（长轮询，服务器不关闭连接，客户端主动进行超时关闭重连）；
-3、协议原理：基于TCP协议（帧形式数据）、具有命名空间、可以和http server共享同一端口；
-4、请求头：connection（upgrade+201）、upgrade（websocket）、sec-websocket-key（用于验证的标识）、sec-websocket-version（确认版本）、sec-websocket-extensions（支持的插件）；
-5、响应头：connection（upgrade）、upgrade（websocket）、sec-websocket-accept（接受的标识，从前端的key中加上固定标识sha1得到结果）；
-
-### 4.8、缓存
-
-#### 4.8.1、强缓存
+#### 4.6.1、强缓存
 
 1、pragma：http1.0，优先级高于expires，已废弃；
 2、expires：http1.0，使用绝对日期，单位秒；
 3、cache-control：http1.1，常用值（private-仅客户端、public-客户端及代理服务器、max-age-相对时间秒、no-cache-协商缓存、no-store-不缓存）；
 4、处理策略：命中则直接使用，过期删除；
 
-#### 4.8.2、协商缓存
+#### 4.6.2、协商缓存
 
 1、last-modified：最后修改时间；
 2、if-modified-since：对应last-modified，一致则304，不一致则200；
@@ -258,13 +236,52 @@ patch		是			否			否			否		    否		否
 4、if-none-match：对应etag，一致则304，不一致则200；
 5、处理策略：命中时判断有效期，过期则跟服务器进行验证，并设置下次过期时间；
 
-#### 4.8.3、默认缓存
+#### 4.6.3、默认缓存
 
 1、expires：响应头没有提供其他有效缓存策略时，expires=（Date.now - lastModified）* 0.1，如果时间匹配，则使用缓存，否则进行验证；
 
-### 4.9、跨域
+### 4.7、跨域
 
 1、cors：cross origin resource sharing，跨域资源共享；
 2、简单请求：包括简单请求方法（get、head、post）、请求头（可设置：accept、accept-language、content-language、content-type、DPR、width、viewport-width）、请求文档类型（text/plain、multipart/form-data、application/x-www-form-urlencoded）、xhr.upload（send数据时，upload对象没有绑定任何监听事件）、请求中没有使用ReadableStream对象（post、put均可发送可读流对象）；
 3、预检请求：xhr或fetch属于非简单请求时，浏览器会发送一个options预检请求，并设置其头部access-control-allow-origin/methods/headers等，正式请求也必须附带此响应头才可以；
 4、解决方案：cors、jsonp、代理、postMessage；
+
+# 5、HTTPS协议
+
+1、秘钥协商：利用非对称加密算法（RSA等）协商；
+2、加密传输：利用对称加密算法（DEC等）加密；
+3、数字证书：包含（公钥、域名或IP、加密算法、有效期、颁发者、指纹、数字签名等），由CA机构颁发；
+4、防止篡改：CA机构对证书内容做摘要（hash算法）并使用ca私钥加密摘要得到数字签名，浏览器使用ca公钥去解密证书数字签名来验证是否被篡改；
+
+### 5.1、握手
+
+阶段：hello阶段（1、2点）、exchange key阶段（3、4点）；
+
+##### 5.1.1、握手过程
+
+1、客户端hello：包括协议版本、支持RSA加密套件、随机数等；
+2、服务端hello：包括协议版本、选择的RSA加密套件、证书（包含公钥等信息）、随机数等；
+3、客户端验证：包括验证【服务端】证书是否有效（无效弹出警告）、生成随机秘钥并用证书公钥加密等；
+
+##### 5.1.2、随机数
+
+原因：为了保证协商出来的对称加密秘钥的随机性（SSL协议不信任每个主机都能产生完全随机的随机数，因此三个伪随机更接近于真实随机）；
+作用：客户端与服务端分别对3个随机数进行计算，生成本次会话用的对称加密秘钥；
+1、客户端hello：明文随机数；
+2、服务端hello：明文随机数；
+3、客户端验证：公钥加密的随机数（pre-master-key）；
+
+##### 5.1.3、双端验证
+
+2、服务端hello：要求客户端证书；
+3、客户端验证：传递自己的证书；
+4、服务端验证（TLS1.3版本中，只有使用双端证书才需要验证）：验证客户端证书（无效则拒绝响应）；
+
+# 6、WebSocket协议
+
+1、兼容性：IE10、FF6、Chrome14、Safiri6等；
+2、降级兼容：sockjs、socket.io、xhr-streaming（持久连接+分块传输编码，只允许服务器向客户的单向推数据）、eventsource（不支持IE）、long-poll（长轮询，服务器不关闭连接，客户端主动进行超时关闭重连）；
+3、协议原理：基于TCP协议（帧形式数据）、具有命名空间、可以和http server共享同一端口；
+4、请求头：connection（upgrade+201）、upgrade（websocket）、sec-websocket-key（用于验证的标识）、sec-websocket-version（确认版本）、sec-websocket-extensions（支持的插件）；
+5、响应头：connection（upgrade）、upgrade（websocket）、sec-websocket-accept（接受的标识，从前端的key中加上固定标识sha1得到结果）；

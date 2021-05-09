@@ -69,7 +69,7 @@ IE9、Chrome5、Firefox4、Safari5；
 9、deactivated：只有在keep-alive中才生效；
 10、beforeDestroy；
 11、destroyed；
-12、errorCaptured；
+12、errorCaptured：错误捕获，全局错误捕获Vue.config.errorHandler；
 
 # 6、computed及watch
 
