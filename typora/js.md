@@ -125,7 +125,15 @@
 3、字符串trimStart、trimEnd；
 4、Object.fromEntries；
 5、Symbol.prototype.description：symbol的描述信息；
-6、基本类型：BigInt；
+
+##### 2.4.6、es11
+
+1、基本类型：BigInt；
+2、动态导入：import()、import.meta（导入对象元数据，如import.meta.url即为导入内容）；
+3、Promise.allSettled；
+4、可选链：?.（存在则处理）；
+5、空值合并：??（仅当左侧为null或undefined时选择右侧）；
+6、导出内容：export * as ns from 'xxx'；
 
 ### 2.5、箭头函数
 

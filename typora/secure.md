@@ -23,3 +23,6 @@
 避免：x-frame-options头（deny：不允许iframe、sameorigin：同域、allow-from：指定源）、js防御（self==top）；
 
 ## 5、重放攻击
+
+原理：利用拿到的请求信息重新进行请求；
+避免：保证标识（sign）的唯一性、单次使用（用完即过期）；

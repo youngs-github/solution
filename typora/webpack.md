@@ -56,7 +56,11 @@ generator：@babel/generator包，根据preset、plugin等对ast进行处理然�
 1、targets：使用browserslist中配置的浏览器参数；
 2、loose：使用宽松模式，默认是false，如class的内部方法挂载原型上不可遍历，使用loose时会挂载到prototype上；
 3、modules：使用何种模块手段，如amd、cjs、umd、false等，默认是auto，如果想全部使用es6则使用false，使用cjs时基本无法tree shaking；
-4、useBuiltIns：使用corejs对代码进行polyfill，如usage（使用及加入）、entry（手动引入）、false（不使用）；
+4、useBuiltIns：
+	1、entry：手动引入，缺点（不能按需、部分冗余、污染全局）；
+	2、usage：使用分析，缺点（不能检测node_modules，需要开启babel-loader的include、externals问题）；
+	3、false：不使用（默认）；
+5、通用兼容方案：entry模式（手动添加，如core-js/stable）、为IE单独打polyfill包（接口检测浏览器类型而分类加载）；
 
 ### 1.6、polyfill
 
