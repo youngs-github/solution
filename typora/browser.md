@@ -36,11 +36,13 @@
 
 1、input event：用户交互事件，包括阻塞事件（touch、wheel）、非阻塞事件（click、keypress）；
 2、js：js主线程解析执行，包含timer定时器；
-3、begin frame：帧开始，包含window.resize、onscroll、mediaquery changed、animation events等；
+3、begin frame：帧开始，包含window.resize、onscroll（经过验证，确实早于raf）、mediaquery changed、animation events等；
 4、动画：请求动画帧，包含requestAnimationFrame、IntersectionObserver；
 5、layout：布局计算，包含recalc style、update layout、ResizeObserver；
 6、paint：绘制，包含composing、paint、record；
 7、idle：空闲时间，包含requestIdleCallback；
+
+注：vSync，垂直同步信号（沟通各方），显示器 => GPU => 浏览器进程 => 渲染进程，开始新一帧的绘制；
 
 ### 1.6、URL到页面展示
 
@@ -188,10 +190,17 @@
 
 ### 2.1、同源策略
 
+##### 2.1.1、概念
+
 1、概念：sop（same-origin-policy）；
 2、条件：协议、域名、端口三者任意不匹配；
 3、不会跨域的标签：script、image（埋点使用）、link；
-4、影响：cookie、storage等无法访问；
+
+##### 2.1.2、影响
+
+1、dom层面：同源时，诸如opener属性可以修改另外标签的dom元素；
+2、数据层面：同源时，不同标签可以拿到相同的cookie、indexdb、storage等；
+3、网络层面：同源时，xhr等可以无限制的请求；
 
 ### 2.2、跨标签通信
 

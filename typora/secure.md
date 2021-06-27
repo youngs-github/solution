@@ -3,7 +3,7 @@
 概念：跨站脚本攻击（cross site script），注入恶意代码进行篡改从而获取/控制其他用户隐私信息；
 分类：反射型（欺骗用户点链接）、持久型（存储脚本信息）、基于dom（修改用户页面）；
 原因：购买广告添加恶意连接欺骗用户点击、用户输入代码等；
-避免：csp（content-security-policy，内容安全策略）、保护cookie（httponly、secure）、输入检查（过滤/编码特殊字符）、输出检查（过滤/编码特殊字符）；
+避免：csp（content-security-policy，内容安全策略，让服务器决定浏览器可以加载哪些资源）、保护cookie（httponly、secure）、输入检查（过滤/编码特殊字符）、输出检查（过滤/编码特殊字符）；
 
 ## 2、csrf
 
