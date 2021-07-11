@@ -45,17 +45,32 @@
 
 ##### 1.4.1、==
 
-1、null==undefined：返回true；
-2、存在number：将其他转为number再比较；
-3、存在boolean：将boolean转为number再比较；
-4、存在object：将object转为基础类型再比较；
+1、类型相同：使用===严格比较；
+2、null==undefined：返回true；
+3、string==number：将string转为number进行比较；
+4、存在boolean：将其他转为number再比较；
+5、存在object：通过ToPrimitive转为基础类型再比较；
+6、返回false（一般就是null==1、null==true、null==""、null=symbol等）；
 
-##### 1.4.2、toNumber
+##### 1.4.2、+、-
+
+1、通过ToPrimitive方法获取原始类型（valueOf、toString），非原始类型则返回TypeError；
+2、存在string类型，则转为string类型进行求值（ToString）；
+3、按照number类型求值（ToNumber）；
+
+##### 1.4.3、ToString
+
+1、undefined、null转为普通字符串；
+2、boolean、number、string转为普通字符串；
+3、object通过ToPrimitive方法获取原始类型，再转为普通字符串；
+
+##### 1.4.4、ToNumber
 
 1、undefined：NaN;
 2、null：0；
 3、boolean：true=1、false=0；
 4、string：能解析就解析，不能就NaN；
+5、object：通过ToPrimitive方法获取原始类型再解析；
 
 ### 1.5、var、let、const
 
@@ -74,6 +89,7 @@
 
 1、闭包存储在堆区（closure），编译过程中扫描函数的内部函数（多个闭包方法，执行某个未引用变量的方法时，依然会存在闭包closure对象，因为预扫描是必不可少的）；
 2、产生闭包的核心：扫描内部函数、将内部函数引用的外部变量保存到堆中；
+3、几乎所有方法都是闭包，除了浏览器（v8等）自带方法，console.dir方法可以打印出方法的作用域链（Scopes）；
 
 ##### 1.6.3、问题
 
@@ -98,7 +114,7 @@
 
 ##### 1.7.4、副回收器
 
-1、新生代使用Scavenge算法来处理；
+1、新生代使用Scavenge算法来处理（v8使用并行策略，新开多个线程进行垃圾标记清理，最后同步更新，防止地址变化）；
 2、采用复制的方式将堆内存一分为二，该算法是典型的空间换时间算法，只能使用堆内存的一半，但是非常适合新生代这种对象生命周期较短的情况（回收之后，两边角色转换，From空间变成To空间，To空间变成From空间）；
 3、对象晋升：新生代对象移动到老生代中的过程称为晋升，From空间的存活对象在复制到To空间之前需要进行检查，对象晋升的条件主要有两个，一个是对象是否经历过Scavenge回收（两次垃圾回收），另一个是To空间的内存占用比超过限制(如果To空间使用量已经超过25%，则直接晋升)；
 4、全停顿：stop the world，新生代内存较小，即便使用全停顿影响也不大；
@@ -111,7 +127,7 @@
 4、全停顿：stop the world，老生代内存较大，使用全停顿影响很大，故而产生增量标记、延迟清理、增量整理等算法；
 5、增量标记：把完整的垃圾回收任务拆分成很大小任务，垃圾回收与应用逻辑交替执行，提升用户体验；
 
-### 1.8、V8工作原理
+### 1.8、V8
 
 ##### 1.8.1、编译/解释
 
