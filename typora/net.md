@@ -26,16 +26,16 @@
 
 ##### 2.1.1、三次握手
 
-1、客户端：SYN=1、seq=x；
-2、服务端：SYN=1、ACK=1、seq=y、ack=x+1；
-3、客户端：ACK=1、seq=x+1、ack=y+1；
+1、客户端：SYN=1、seq=x，客户端（syn-send）；
+2、服务端：SYN=1、ACK=1、seq=y、ack=x+1，服务器（syn-received）；
+3、客户端：ACK=1、seq=x+1、ack=y+1，客户端（established）、服务器（established）；
 
 ##### 2.1.2、四次挥手
 
-1、客户端：FIN=1、seq=u；
-2、服务端：ACK=1、seq=v、ack=u+1；
-3、服务端：FIN=1、ACK=1、seq=w、ack=u+1；
-4、客户端：ACK=1、seq=u+1、ack=w+1；
+1、客户端：FIN=1、seq=u，客户端（fin-wait-1）；
+2、服务端：ACK=1、seq=v、ack=u+1，客户端（fin-wait-2）、服务端（close-wait）；
+3、服务端：FIN=1、ACK=1、seq=w、ack=u+1，服务端（last-ack）；
+4、客户端：ACK=1、seq=u+1、ack=w+1，客户端（time-wait）；
 
 ##### 2.1.3、拥塞控制
 
@@ -64,14 +64,16 @@
 
 ### 2.3、TCP与UDP的区别
 
-​				TCP								UDP
+|               | TCP                            | UDP                            |
+| ------------- | ------------------------------ | ------------------------------ |
+| 是否连接      | 连接                           | 非连接                         |
+| 传输可靠      | 可靠                           | 不可靠                         |
+| 传输内容      | 字节流（分割成组，接收端重组） | 报文（没有分组开销）           |
+| 拥塞/流量控制 | 提供                           | 不提供                         |
+| 首部大小      | 20字节                         | 8字节                          |
+| 一对多        | 一对一                         | 一对一、一对多、多对一、多对多 |
 
-是否连接			连接								非连接
-传输可靠			可靠								不可靠
-传输内容			字节流（分割成组，接收端重组）		报文（没有分组开销）
-拥塞/流量控制		提供								不提供
-首部大小			20字节							8字节
-一对多			一对一							一对一、一对多、多对一、多对多
+
 
 ### 2.4、TCP粘包
 
@@ -103,7 +105,20 @@
 
 ### 4.2、版本区别
 
-##### 4.2.1、http1.1、1.0区别
+##### 4.2.1、http0.9（蛮荒）
+
+1、纯文本格式；
+2、仅支持get方式；
+
+##### 4.2.2、http1.0（非标准）
+
+1、增加了head、post等新方法；
+2、增加了响应状态码，标记可能的错误原因；
+3、引入了协议版本号；
+4、引入了http header的概念；
+5、传输的数据不再仅限于文本；
+
+##### 4.2.3、http1.1、1.0区别
 
 1、缓存处理（缓存头，新增Cache-Control、ETag、If-None-Match、Last-Modified、If-Modified-Since等）；
 2、带宽优化及网络连接的使用（支持range头即断点续传，支持不发送请求/响应body部分）；
@@ -112,7 +127,7 @@
 5、长连接（keep-alive，后端配置connection头控制）、pipeline（流水线功能，因为存在队头阻塞问题，但最终未实现）；
 6、新增五种方法：options、put、delete、trace、connect；
 
-##### 4.2.2、http2.0、1.1区别
+##### 4.2.4、http2.0、1.1区别
 
 1、多路复用（一个连接并发处理多个请求，减缓了tcp传输的慢启动影响、队头阻塞影响、多连接无优先级竞争带宽影响，但此时tcp依然存在队头阻塞问题，即是包顺序问题）；
 2、二进制传输（帧：二进制分帧，通信的最小单位，消息由一个或多个帧组成；流：存在于连接中的虚拟通道，可以承载双向消息，每个流都有唯一的整数ID）；
@@ -120,7 +135,7 @@
 4、服务端推送（server push）；
 5、目前启用http2必须同时使用https；
 
-##### 4.2.3、http3.0、2.0区别
+##### 4.2.5、http3.0、2.0区别
 
 1、基于udp的quic协议（传输过程中没有新协议产生），但是操作系统、物理设备对udp的优化程度远远低于tcp（丢包严重）；
 2、实现了快速握手（仅需1个RTT）、多路复用、tls加密、流量控制、可靠传输等功能；
@@ -167,16 +182,18 @@
 
 ### 4.4、方法
 
-方法		有请求体		有响应体		是否安全		是否幂等		可缓存	     表单支持		描述
-get			否			是			是			是		    是		是
-head		否			否			是			是		    是		否			文件长度
-post			是			是			否			否		    基本否		是
-put			是			是			否			是		    否		否			201/204
-delete		是			是			否			是		    否		否			204/404问题
-connect		否			是			否			否		    否		否
-options		否			是			是			是		    否		否			跨域问题
-trace		否			否			否			是		    否		否
-patch		是			否			否			否		    否		否
+|         | 有请求体 | 有响应体 | 是否安全 | 是否幂等 | 可缓存 | 表单支持 | 描述     |
+| ------- | -------- | -------- | -------- | -------- | ------ | -------- | -------- |
+| get     | 否       | 是       | 是       | 是       | 是     | 是       |          |
+| head    | 否       | 否       | 是       | 是       | 是     | 否       | 文件长度 |
+| post    | 是       | 是       | 否       | 否       | 基本否 | 是       |          |
+| put     | 是       | 是       | 否       | 是       | 否     | 否       | 201/204  |
+| delete  | 是       | 是       | 否       | 是       | 否     | 否       | 204/404  |
+| connect | 否       | 是       | 否       | 否       | 否     | 否       |          |
+| options | 否       | 是       | 是       | 是       | 否     | 否       | 跨域     |
+| trace   | 否       | 否       | 否       | 是       | 否     | 否       |          |
+
+
 
 ### 4.5、状态码
 
@@ -199,7 +216,10 @@ patch		是			否			否			否		    否		否
 300：multiple choices，多种选择；
 301：moved permanently，永久重定向，仅限get、head请求；
 302：moved temporarily，临时重定向；
+303：see other，类似302，但重定向后只能使用get方法，避免post/put重复操作；
 304：not-modified，无修改，常用于浏览器协商缓存；
+307：temporarily redirect：类似302，但重定向后的方法、请求体不可以修改；
+308：permanent redirect：类似301，但重定向后的方法、请求体不可以修改；
 
 #### 4.5.4、400系列
 
@@ -232,7 +252,7 @@ patch		是			否			否			否		    否		否
 
 1、pragma：http1.0，优先级高于expires，已废弃；
 2、expires：http1.0，使用绝对日期，单位秒；
-3、cache-control：http1.1，常用值（private-仅客户端、public-客户端及代理服务器、max-age-相对时间秒、no-cache-协商缓存、no-store-不缓存）；
+3、cache-control：http1.1，常用值有private（仅客户端）、public（客户端及代理服务器）、max-age（相对时间秒）、no-cache（协商缓存，必须重新验证）、no-store（不缓存）、must-revalidate（协商缓存，过期后必须验证）；
 4、处理策略：命中则直接使用，过期删除；
 
 #### 4.6.2、协商缓存
@@ -253,6 +273,26 @@ patch		是			否			否			否		    否		否
 2、简单请求：包括简单请求方法（get、head、post）、请求头（可设置：accept、accept-language、content-language、content-type、DPR、width、viewport-width）、请求文档类型（text/plain、multipart/form-data、application/x-www-form-urlencoded）、xhr.upload（send数据时，upload对象没有绑定任何监听事件）、请求中没有使用ReadableStream对象（post、put均可发送可读流对象）；
 3、预检请求：xhr或fetch属于非简单请求时，浏览器会发送一个options预检请求，并设置其头部access-control-allow-origin/methods/headers等，正式请求也必须附带此响应头才可以；
 4、解决方案：cors、jsonp、代理、postMessage；
+
+### 4.8、cookie
+
+##### 4.8.1、概念
+
+1、使用：SetCookie（可以设置多条，header中的特殊属性）、document.cookie、xhr等；
+2、过期：Expires（绝对时间）、Max-Age（相对时间，优先级高，如果设置为0，则属于会话级别，不会存储，相当于不设置）；
+3、三方：SameSite（跨站属性，防止csrf）：strict（严格模式）、lax（默认值）、none（不限制，必须使用secure属性）；
+
+##### 4.8.2、影响
+
+| 请求类型  | None       | Lax                     | Strict       |
+| --------- | ---------- | ----------------------- | ------------ |
+| a标签     | 发送cookie | 发送cookie              | 不发送cookie |
+| link标签  | 发送cookie | 发送cookie（prerender） | 不发送cookie |
+| form+get  | 发送cookie | 发送cookie              | 不发送cookie |
+| form+post | 发送cookie | 不发送cookie            | 不发送cookie |
+| iframe    | 发送cookie | 不发送cookie            | 不发送cookie |
+| xhr       | 发送cookie | 不发送cookie            | 不发送cookie |
+| image     | 发送cookie | 不发送cookie            | 不发送cookie |
 
 # 5、HTTPS协议
 
